@@ -1,0 +1,25 @@
+-- 1. Create Dimension Table for the 14 GB Regions
+CREATE TABLE IF NOT EXISTS dno_regions (
+   region_id INT PRIMARY KEY,
+   region_name VARCHAR(50) NOT NULL
+);
+
+-- 2. Create Fact Table for National Carbon Intensity Readings
+CREATE TABLE IF NOT EXISTS national_intensity (
+  from_datetime TIMESTAMP WITH TIME ZONE,
+  to_datetime TIMESTAMP WITH TIME ZONE,
+  intensity_forecast INT,
+  intensity_actual INT,
+  intensity_index VARCHAR(20),
+  PRIMARY KEY (from_datetime)
+);
+
+-- 3. Create Fact Table for Regional Generation Fuel Mix
+CREATE TABLE IF NOT EXISTS regional_fuel_mix (
+  timestamp TIMESTAMP WITH TIME ZONE,
+  region_id INT,
+  fuel_type VARCHAR(30),
+  generation_share_pct NUMERIC(5,2),
+  PRIMARY KEY (timestamp, region_id, fuel_type),
+  FOREIGN KEY (region_id) REFERENCES dno_regions(region_id)
+  )
